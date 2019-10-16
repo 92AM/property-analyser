@@ -22,19 +22,19 @@ public class PropertiesAnalyserServiceImplTest {
     public void testCalculateMeanPriceOfPropertiesBasedOnPostcodeOutward() {
 
         assertEquals(String.format("Expected result is %s", 0.0),0.0,
-                this.propertiesAnalyserService.calculateMeanPriceOfPropertiesBasedOnPostcodeOutward("HHH"),
+                this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("HHH"),
                 DELTA);
 
         assertEquals(String.format("Expected result is %s", 1158750.0), 1158750.0,
-                this.propertiesAnalyserService.calculateMeanPriceOfPropertiesBasedOnPostcodeOutward("W1F"),
+                this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("W1F"),
                 DELTA);
 
         assertEquals(String.format("Expected result is %s", 2440000.0), 2440000.0,
-                this.propertiesAnalyserService.calculateMeanPriceOfPropertiesBasedOnPostcodeOutward("GU13"),
+                this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("GU13"),
                 DELTA);
 
         assertEquals(String.format("Expected result is %s", 230861.0),230861.0,
-                this.propertiesAnalyserService.calculateMeanPriceOfPropertiesBasedOnPostcodeOutward("SH1"),
+                this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("SH1"),
                 DELTA);
     }
 
@@ -43,12 +43,12 @@ public class PropertiesAnalyserServiceImplTest {
 
         assertEquals(String.format("Expected result is %s", 92386.0), 92386.0,
                 this.propertiesAnalyserService
-                        .calculateDifferenceBetweenAveragePricesOfTwoPropertyTypes("Detached", "Flat"),
+                        .calculateAveragePriceDifferenceOfTwoPropertyTypes("Detached", "Flat"),
                 DELTA);
 
         assertEquals(String.format("Expected result is %s", 1078250.0), 1078250.0,
                 this.propertiesAnalyserService
-                        .calculateDifferenceBetweenAveragePricesOfTwoPropertyTypes("Mansion", "Flat"),
+                        .calculateAveragePriceDifferenceOfTwoPropertyTypes("Mansion", "Flat"),
                 DELTA);
     }
 
@@ -67,6 +67,5 @@ public class PropertiesAnalyserServiceImplTest {
             assertEquals(String.format("Expected result is %s", "Surrey"), "Surrey", p.getRegion());
             assertEquals(String.format("Expected result is %s", "Mansion"), "Mansion", p.getPropertyType());
         });
-
     }
 }

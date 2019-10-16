@@ -16,7 +16,7 @@ public interface PropertiesAnalyserService {
      * @param postcodeOutward String
      * @return mean price in double
      */
-    double calculateMeanPriceOfPropertiesBasedOnPostcodeOutward(String postcodeOutward);
+    double calculateMeanPriceBasedOnPostcodeOutward(String postcodeOutward);
 
     /**
      * Calculates the difference between average price of two property types, this method will work out the average
@@ -27,8 +27,8 @@ public interface PropertiesAnalyserService {
      * @param secondPropertyType String
      * @return difference in average in double
      */
-    double calculateDifferenceBetweenAveragePricesOfTwoPropertyTypes(String firstPropertyType,
-                                                                     String secondPropertyType);
+    double calculateAveragePriceDifferenceOfTwoPropertyTypes(String firstPropertyType,
+                                                             String secondPropertyType);
 
     /**
      * Finds list of most expensive properties which falls within the top 10% of the price bracket.

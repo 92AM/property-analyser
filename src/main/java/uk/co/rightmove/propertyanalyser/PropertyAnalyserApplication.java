@@ -10,5 +10,4 @@ public class PropertyAnalyserApplication {
 
         SpringApplication.run(PropertyAnalyserApplication.class, args);
     }
-
 }

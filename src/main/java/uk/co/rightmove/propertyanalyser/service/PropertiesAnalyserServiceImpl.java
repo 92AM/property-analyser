@@ -32,12 +32,11 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
                 .loadJsonFromFile(PropertyAnalyserConstants.DATASET));
     }
 
-
     /**
      * {@inheritDoct}
      */
     @Override
-    public double calculateMeanPriceOfPropertiesBasedOnPostcodeOutward(String postcodeOutward) {
+    public double calculateMeanPriceBasedOnPostcodeOutward(String postcodeOutward) {
 
         return properties
                 .stream()
@@ -47,13 +46,12 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
                 .orElse(0);
     }
 
-
     /**
      * {@inheritDoct}
      */
     @Override
-    public double calculateDifferenceBetweenAveragePricesOfTwoPropertyTypes(String firstPropertyType,
-                                                                            String secondPropertyType) {
+    public double calculateAveragePriceDifferenceOfTwoPropertyTypes(String firstPropertyType,
+                                                                    String secondPropertyType) {
 
         int firstPropertyTypeTotalPrice = 0;
         int secondPropertyTypeTotalPrice = 0;
@@ -73,9 +71,9 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
             }
         }
 
-        return (firstPropertyTypeTotalPrice / propertyCount) - (secondPropertyTypeTotalPrice / propertyCount);
+        return (firstPropertyTypeTotalPrice / propertyCount) -
+                (secondPropertyTypeTotalPrice / propertyCount);
     }
-
 
     /**
      * {@inheritDoct}

@@ -2,6 +2,10 @@ package uk.co.rightmove.propertyanalyser.model;
 
 import lombok.*;
 
+/**
+ * Property is a POJO that holds information about a property, this can include property price, property address,
+ * house number, postcode, etc.
+ */
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @Getter
