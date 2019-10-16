@@ -89,8 +89,10 @@
 				<configuration>
 					<excludes>
 						<exclude>uk\co\rightmove\propertyanalyser\util\PropertyAnalyserConstants.*</exclude>
+						<exclude>uk\co\rightmove\propertyanalyser\exception\PropertyAnalyserException.*</exclude>
+						<exclude>uk\co\rightmove\propertyanalyser\model\Property.*</exclude>
 					</excludes>
-					<targetPercentage>70%</targetPercentage>
+					<targetPercentage>90%</targetPercentage>
 				</configuration>
 				<executions>
 					<execution>

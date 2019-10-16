@@ -8,6 +8,6 @@ public class PropertyAnalyserApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(PropertyAnalyserApplication.class, args);
+        SpringApplication.run(PropertyAnalyserApplication.class);
     }
 }

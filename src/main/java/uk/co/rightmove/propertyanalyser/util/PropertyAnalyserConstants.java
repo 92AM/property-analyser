@@ -1,8 +1,11 @@
 package uk.co.rightmove.propertyanalyser.util;
 
+import lombok.experimental.UtilityClass;
+
 /**
- * Final class that hold all the constant variables used across the project.
+ * Utility class that hold all the constant variables used across the project.
  */
+@UtilityClass
 public final class PropertyAnalyserConstants {
 
     public static final String DATASET = "property-data.json";
@@ -18,6 +21,5 @@ public final class PropertyAnalyserConstants {
     public static final String POSTCODE = "postcode";
     public static final String PROPERTY_TYPE = "propertyType";
 
-    private PropertyAnalyserConstants() {
-    }
+    public static final String PERCENT_REGEX = "^(?:0*(?:\\.\\d+)?|1(\\.0*)?)$";
 }

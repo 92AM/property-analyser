@@ -5,9 +5,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.server.ResponseStatusException;
+import uk.co.rightmove.propertyanalyser.model.Property;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,32 +24,48 @@ public class PropertiesAnalyserServiceImplTest {
     private PropertiesAnalyserServiceImpl propertiesAnalyserService;
 
     @Test
-    public void testCalculateMeanPriceOfPropertiesBasedOnPostcodeOutward() {
-
-        assertEquals(String.format("Expected result is %s", 0.0),0.0,
-                this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("HHH"),
-                DELTA);
+    public void testCalculateMeanPriceOfPropertiesForPostcodeOutwardW1F() {
 
         assertEquals(String.format("Expected result is %s", 1158750.0), 1158750.0,
                 this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("W1F"),
                 DELTA);
+    }
+
+    @Test
+    public void testCalculateMeanPriceOfPropertiesForPostcodeOutwardGU13() {
 
         assertEquals(String.format("Expected result is %s", 2440000.0), 2440000.0,
                 this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("GU13"),
                 DELTA);
+    }
 
-        assertEquals(String.format("Expected result is %s", 230861.0),230861.0,
+    @Test
+    public void testCalculateMeanPriceOfPropertiesForPostcodeOutwardSH1() {
+
+        assertEquals(String.format("Expected result is %s", 230861.0), 230861.0,
                 this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("SH1"),
                 DELTA);
     }
 
     @Test
-    public void calculateDifferenceBetweenAveragePricesOfTwoPropertyTypes() {
+    public void testCalculateMeanPriceOfPropertiesForPostcodeOutwardThatIsNotInDataset() {
+
+        assertEquals(String.format("Expected result is %s", 0.0), 0.0,
+                this.propertiesAnalyserService.calculateMeanPriceBasedOnPostcodeOutward("HHH"),
+                DELTA);
+    }
+
+    @Test
+    public void testCalculateDifferenceBetweenAveragePricesOfDetachedAndFlatProperties() {
 
         assertEquals(String.format("Expected result is %s", 92386.0), 92386.0,
                 this.propertiesAnalyserService
                         .calculateAveragePriceDifferenceOfTwoPropertyTypes("Detached", "Flat"),
                 DELTA);
+    }
+
+    @Test
+    public void testCalculateDifferenceBetweenAveragePricesOfMansionAndFlatProperties() {
 
         assertEquals(String.format("Expected result is %s", 1078250.0), 1078250.0,
                 this.propertiesAnalyserService
@@ -53,9 +74,18 @@ public class PropertiesAnalyserServiceImplTest {
     }
 
     @Test
+    public void testCalculateDifferenceBetweenAveragePricesWhenPropertyCountIsZero() {
+
+        assertEquals(String.format("Expected result is %s", 0.0), 0.0,
+                this.propertiesAnalyserService
+                        .calculateAveragePriceDifferenceOfTwoPropertyTypes("Bungalow", "Cottage"),
+                DELTA);
+    }
+
+    @Test
     public void findTopTenPercentMostExpensiveProperties() {
 
-        this.propertiesAnalyserService.findTopXPercentOfMostExpensiveProperties(0.10).forEach(p -> {
+        this.propertiesAnalyserService.findTopXPercentOfMostExpensiveProperties("0.10").forEach(p -> {
             assertNotNull(p);
             assertEquals(String.format("Expected result is %s", "Brighton Road "), "Brighton Road ", p.getAddress());
             assertEquals(String.format("Expected result is %s", "GU13 4DD"), "GU13 4DD", p.getPostcode());
@@ -68,4 +98,27 @@ public class PropertiesAnalyserServiceImplTest {
             assertEquals(String.format("Expected result is %s", "Mansion"), "Mansion", p.getPropertyType());
         });
     }
+
+    @Test
+    public void findTopNinetyFivePercentMostExpensiveProperties() {
+
+        int[] actualPropertyReferences = this.propertiesAnalyserService
+                .findTopXPercentOfMostExpensiveProperties("0.95")
+                .stream()
+                .mapToInt(Property::getPropertyReference)
+                .toArray();
+
+        int[] expectedPropertyReferences = {1, 6, 8, 9, 10, 11, 12, 13, 18, 19, 24};
+
+        assertTrue(String.format("Expected result : %s ", Arrays.toString(expectedPropertyReferences)),
+                Arrays.equals(expectedPropertyReferences, actualPropertyReferences));
+    }
+
+
+    @Test (expected = ResponseStatusException.class)
+    public void findXPercentMostExpensivePropertiesThrowsException() {
+
+        this.propertiesAnalyserService.findTopXPercentOfMostExpensiveProperties("1NV4L1D_P4RAM");
+    }
+
 }

@@ -23,17 +23,17 @@ public interface PropertiesAnalyserService {
      * price of the first property type and the second property type. This method will then deduct the average of
      * the second property type from the first property type.
      *
-     * @param firstPropertyType String
-     * @param secondPropertyType String
+     * @param firstType String
+     * @param secondType String
      * @return difference in average in double
      */
-    double calculateAveragePriceDifferenceOfTwoPropertyTypes(String firstPropertyType,
-                                                             String secondPropertyType);
+    double calculateAveragePriceDifferenceOfTwoPropertyTypes(String firstType,
+                                                             String secondType);
 
     /**
-     * Finds list of most expensive properties which falls within the top 10% of the price bracket.
+     * Finds list of most expensive properties which falls within the top given percentage of the price bracket.
      *
      * @return List of Property(s)
      */
-    List<Property> findTopXPercentOfMostExpensiveProperties(double percent);
+    List<Property> findTopXPercentOfMostExpensiveProperties(String percent);
 }

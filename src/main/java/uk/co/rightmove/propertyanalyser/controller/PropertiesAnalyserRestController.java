@@ -18,11 +18,10 @@ public class PropertiesAnalyserRestController {
     @Autowired
     private PropertiesAnalyserService propertiesAnalyserService;
 
-
     /**
      * Calling on this REST endpoint will result in invocation of 'calculateMeanPriceBasedOnPostcodeOutward()'
      * method to calculate the mean price of all properties based on given postcode outward.
-     *
+     * <p>
      * REST address : "/mean/{postcode}/outward"
      *
      * @param postcode String
@@ -36,10 +35,31 @@ public class PropertiesAnalyserRestController {
 
 
     /**
+     * Calling on this REST endpoint will result in invocation of 'calculateAveragePriceDifferenceOfTwoPropertyTypes()'
+     * method to calculate average price difference of the two given property types.
+     * <p>
+     * REST address : "/average-difference/property/{firstType}/property/{secondType}"
+     *
+     * @param firstType  String
+     * @param secondType String
+     * @return value in double
+     */
+    @GetMapping(value = "/average-difference/property/{firstType}/property/{secondType}")
+    public double callCalculateAveragePriceDifferenceOfTwoPropertyTypes(
+            @PathVariable String firstType,
+            @PathVariable String secondType) {
+
+        return propertiesAnalyserService.calculateAveragePriceDifferenceOfTwoPropertyTypes(
+                firstType,
+                secondType);
+    }
+
+
+    /**
      * Calling of this REST endpoint will result in invocation of 'callFindTopXPercentOfMostExpensiveProperties()'
      * method to find the list of properties that falls under the given top percentage. For example if '0.10'
      * is passed in as input parameter then top 10% of the properties will be fed back to the calling system.
-     *
+     * <p>
      * REST address : "/top/{percent}"
      *
      * @param percent String
@@ -48,28 +68,8 @@ public class PropertiesAnalyserRestController {
     @GetMapping(value = "/top/{percent}")
     public List<Property> callFindTopXPercentOfMostExpensiveProperties(@PathVariable String percent) {
 
-        return propertiesAnalyserService.findTopXPercentOfMostExpensiveProperties(Double.valueOf(percent));
-    }
+        return propertiesAnalyserService.findTopXPercentOfMostExpensiveProperties(percent);
 
-
-    /**
-     * Calling on this REST endpoint will result in invocation of 'calculateAveragePriceDifferenceOfTwoPropertyTypes()'
-     * method to calculate average price difference of the two given property types.
-     *
-     * REST address : "/average-difference/first-property/{firstPropertyType}/second-property/{secondPropertyType}"
-     *
-     * @param firstPropertyType String
-     * @param secondPropertyType String
-     * @return value in double
-     */
-    @GetMapping(value = "/average-difference/first-property/{firstPropertyType}/second-property/{secondPropertyType}")
-    public double callCalculateAveragePriceDifferenceOfTwoPropertyTypes(
-            @PathVariable String firstPropertyType,
-            @PathVariable String secondPropertyType) {
-
-        return propertiesAnalyserService.calculateAveragePriceDifferenceOfTwoPropertyTypes(
-                firstPropertyType,
-                secondPropertyType);
     }
 
 }

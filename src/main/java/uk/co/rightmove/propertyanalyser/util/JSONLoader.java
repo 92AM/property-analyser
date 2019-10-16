@@ -1,6 +1,7 @@
 package uk.co.rightmove.propertyanalyser.util;
 
 import com.google.common.io.Resources;
+import lombok.experimental.UtilityClass;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -8,12 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
- * Util class to help parse the raw JSON data and map it into a JSONLoader.
+ * Utility class to help parse the raw JSON data and map it into a JSONLoader.
  */
+@UtilityClass
 public final class JSONLoader {
-
-    private JSONLoader() {
-    }
 
     /**
      * Utility method to loads raw JSON from resource provided into a JSONObject.

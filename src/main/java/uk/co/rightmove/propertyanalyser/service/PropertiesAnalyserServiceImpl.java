@@ -1,7 +1,10 @@
 package uk.co.rightmove.propertyanalyser.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import uk.co.rightmove.propertyanalyser.exception.PropertyAnalyserException;
 import uk.co.rightmove.propertyanalyser.model.Property;
 import uk.co.rightmove.propertyanalyser.util.JSONLoader;
 import uk.co.rightmove.propertyanalyser.util.PropertyAnalyserConstants;
@@ -20,7 +23,9 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
     private final List<Property> properties;
 
     /**
-     * Overloaded constructor of PropertiesAnalyserServiceImpl class.
+     * Overloaded constructor of PropertiesAnalyserServiceImpl class, injecting PropertiesLoaderService into
+     * PropertiesAnalyserServiceImpl in order to invoke loadPropertiesFromJson() method during bean creation to
+     * load all Property(s) from provided dataset.
      *
      * @param propertiesLoaderService PropertiesLoaderService
      * @throws IOException exception
@@ -50,48 +55,70 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
      * {@inheritDoct}
      */
     @Override
-    public double calculateAveragePriceDifferenceOfTwoPropertyTypes(String firstPropertyType,
-                                                                    String secondPropertyType) {
+    public double calculateAveragePriceDifferenceOfTwoPropertyTypes(String firstType,
+                                                                    String secondType) {
 
-        int firstPropertyTypeTotalPrice = 0;
-        int secondPropertyTypeTotalPrice = 0;
+        int firstTypeTotalPrice = 0;
+        int secondTypeTotalPrice = 0;
         int propertyCount = 0;
 
         for (Property property : properties) {
-            if (property.getPropertyType().equals(firstPropertyType)) {
 
-                firstPropertyTypeTotalPrice += property.getPrice();
+            if (property.getPropertyType().equals(firstType)) {
+
+                firstTypeTotalPrice += property.getPrice();
                 propertyCount++;
             }
 
-            if (property.getPropertyType().equals(secondPropertyType)) {
+            if (property.getPropertyType().equals(secondType)) {
 
-                secondPropertyTypeTotalPrice += property.getPrice();
+                secondTypeTotalPrice += property.getPrice();
                 propertyCount++;
             }
         }
 
-        return (firstPropertyTypeTotalPrice / propertyCount) -
-                (secondPropertyTypeTotalPrice / propertyCount);
+        return propertyCount == 0 ? 0 : Math.round((double) (firstTypeTotalPrice / propertyCount) -
+                (double) (secondTypeTotalPrice / propertyCount));
+
     }
 
     /**
      * {@inheritDoct}
      */
     @Override
-    public List<Property> findTopXPercentOfMostExpensiveProperties(double percent) {
+    public List<Property> findTopXPercentOfMostExpensiveProperties(String percent) {
 
-        int maxPrice = properties
-                .stream()
-                .max(Comparator.comparing(Property::getPrice))
-                .get()
-                .getPrice();
+        try {
 
-        double priceToBeat = maxPrice - (percent * maxPrice);
+            if (!percent.matches(PropertyAnalyserConstants.PERCENT_REGEX)) {
 
-        return properties
-                .stream()
-                .filter(p -> p.getPrice() > priceToBeat)
-                .collect(Collectors.toList());
+                throw new PropertyAnalyserException(String.format(
+                        "Input parameter (i.e. %s) doesn't match required regex of %s. A valid example is %s",
+                        percent, PropertyAnalyserConstants.PERCENT_REGEX, "0.10"));
+
+            } else {
+
+                double percentAsDouble = Double.parseDouble(percent);
+
+                int maxPrice = properties
+                        .stream()
+                        .max(Comparator.comparing(Property::getPrice))
+                        .get()
+                        .getPrice();
+
+                double priceToBeat = maxPrice - (percentAsDouble * maxPrice);
+
+                return properties
+                        .stream()
+                        .filter(p -> p.getPrice() > priceToBeat)
+                        .collect(Collectors.toList());
+            }
+
+        } catch (NumberFormatException | PropertyAnalyserException ex) {
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("Invalid parameter provided : %s \n | Reason : %s",
+                            percent, ex.toString()), ex);
+        }
     }
 }
