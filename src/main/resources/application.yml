@@ -1,0 +1,15 @@
+info:
+  version: 1.0
+
+management:
+  security:
+    enabled: false
+
+spring:
+  boot:
+  application:
+    name: Rightmove Property Analyser Service
+
+server:
+  port: 8080
+  ip: localhost
