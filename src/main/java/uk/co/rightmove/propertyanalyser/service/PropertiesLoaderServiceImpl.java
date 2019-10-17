@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 public class PropertiesLoaderServiceImpl implements PropertiesLoaderService {
 
     /**
-     * {@inheritDoct}
+     * {@inheritDoc}
      */
     @Override
     public List<Property> loadPropertiesFromJson(JSONObject propertiesJsonObject) {

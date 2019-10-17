@@ -38,7 +38,7 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
     }
 
     /**
-     * {@inheritDoct}
+     * {@inheritDoc}
      */
     @Override
     public double calculateMeanPriceBasedOnPostcodeOutward(String postcodeOutward) {
@@ -52,7 +52,7 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
     }
 
     /**
-     * {@inheritDoct}
+     * {@inheritDoc}
      */
     @Override
     public double calculateAveragePriceDifferenceOfTwoPropertyTypes(String firstType,
@@ -83,7 +83,7 @@ public class PropertiesAnalyserServiceImpl implements PropertiesAnalyserService 
     }
 
     /**
-     * {@inheritDoct}
+     * {@inheritDoc}
      */
     @Override
     public List<Property> findTopXPercentOfMostExpensiveProperties(String percent) {
