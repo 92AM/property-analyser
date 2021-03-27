@@ -1,6 +1,6 @@
 # property-analyser
 
-RESTful Web API for retrieving properties details.
+RESTful Web API for retrieving properties details. This was the initial @rightmove programming test as part of the recruitment process.
 
 ## Introduction
 
